@@ -16,12 +16,12 @@
 #import <Foundation/Foundation.h>
 #import <StoreKit/StoreKit.h>
 
-@protocol JLPurchaseManagerDelegate
+@protocol JLPurchaseDelegate
 
 // 여기서 서버와의 구매 통신을 하고,
 // 관련된 모든 것이 완료 되었을 때 completion 블록에 YES를 넣고 호출한다. 실패했으면 NO를 넣고 호출.
 // (completion 블록을 호출하지 않으면 로딩 화면이 사라지지 않으므로 주의)
-- (void)JLPurchaseWillFinish:(void(^)(BOOL success))completion;
+- (void)JLPurchaseWillFinish:(SKPaymentTransaction *)transaction completion:(void(^)(BOOL success))completion;
 
 - (void)JLPurchaseDidFinish;
 - (void)JLPurchaseDidFail:(NSError *)error;
@@ -35,12 +35,12 @@
 
 @interface JLPurchaseManager : NSObject
 
-@property (weak, nonatomic) id<JLPurchaseManagerDelegate> delegate;
+@property (weak, nonatomic) id<JLPurchaseDelegate> delegate;
 
 + (JLPurchaseManager *)sharedInstance;
 
 // AppDelegate에서 초반에 호출해야 한다.
-- (void)initializeWithDelegate:(id<JLPurchaseManagerDelegate>)delegate;
+- (void)initializeWithDelegate:(id<JLPurchaseDelegate>)delegate;
 
 // 구매
 - (void)purchaseWithProductID:(NSString *)productID;

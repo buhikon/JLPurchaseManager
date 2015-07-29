@@ -43,7 +43,7 @@ static JLPurchaseManager *instance = nil;
 #pragma mark - public methods
 
 // AppDelegate에서 초반에 호출해야 한다.
-- (void)initializeWithDelegate:(id<JLPurchaseManagerDelegate>)delegate
+- (void)initializeWithDelegate:(id<JLPurchaseDelegate>)delegate
 {
     self.delegate = delegate;
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
@@ -188,7 +188,7 @@ static JLPurchaseManager *instance = nil;
 
 - (void)completeTransaction:(SKPaymentTransaction *)transaction {
     
-    [self.delegate JLPurchaseWillFinish:^(BOOL success) {
+    [self.delegate JLPurchaseWillFinish:transaction completion:^(BOOL success) {
         if(success) {
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             [self.delegate JLPurchaseDidFinish];
@@ -199,7 +199,7 @@ static JLPurchaseManager *instance = nil;
 
 - (void)restoreTransaction:(SKPaymentTransaction *)transaction {
     
-    [self.delegate JLPurchaseWillFinish:^(BOOL success) {
+    [self.delegate JLPurchaseWillFinish:transaction completion:^(BOOL success) {
         if(success) {
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
             [self.delegate JLPurchaseDidFinish];
